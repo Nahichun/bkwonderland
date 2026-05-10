@@ -1,0 +1,1154 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* === Базовые токены === */
+  :root {
+    --color-accent: #bb840f;
+    --color-accent-soft: #f6c97c;
+    --color-bg: #fdf5e6;
+    --color-card: #f8e8cf;
+    --color-text: #333;
+    --color-text-soft: #5a5a5a;
+    --color-border: #e0d5c4;
+    --color-muted: #c0b599;
+    --color-overlay: rgba(0, 0, 0, 0.55);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 5px 20px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.18);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --transition: 0.3s ease;
+    --header-h: 64px;
+    --maxw: 1200px;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body {
+    background-image: url("http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/Group-47.png");
+    background-repeat: repeat;
+    color: var(--color-text);
+    line-height: 1.6;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  main { padding-top: var(--header-h); }
+  @media (max-width: 480px) { main { padding-top: 60px; } }
+
+  img, video, iframe { max-width: 100%; display: block; }
+
+  a { color: inherit; }
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .container { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+  /* === Шапка === */
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto 0;
+    background: rgba(248, 232, 207, 0.97);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    box-shadow: var(--shadow-sm);
+    border-bottom: 2px solid var(--color-accent);
+  }
+  .header-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    min-height: var(--header-h);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--color-accent); }
+  .brand img { height: 42px; width: auto; border-radius: 6px; }
+  .brand-name { font-weight: 700; font-size: clamp(15px, 2.2vw, 20px); white-space: nowrap; }
+
+  .header-nav { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+  .header-nav a {
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-text);
+    transition: background var(--transition), color var(--transition);
+  }
+  .header-nav a:hover,
+  .header-nav a:focus-visible { background: var(--color-accent); color: #fff; }
+
+  .header-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    gap: 2px;
+    line-height: 1.2;
+  }
+  .header-phone {
+    font-size: clamp(14px, 1.8vw, 17px);
+    font-weight: 700;
+    color: var(--color-accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .header-address { font-size: 12px; color: var(--color-text-soft); white-space: nowrap; }
+
+  @media (max-width: 900px) {
+    .header-inner { grid-template-columns: auto 1fr; }
+    .header-nav { display: none; }
+  }
+  @media (max-width: 480px) {
+    .brand-name { display: none; }
+    .header-inner { padding: 8px 14px; gap: 10px; }
+    .brand img { height: 36px; }
+    .header-phone { font-size: 14px; }
+    .header-address { font-size: 11px; }
+  }
+
+  /* === Главный баннер === */
+  .banner-slider {
+    position: relative;
+    width: 100%;
+    height: clamp(320px, 60vh, 720px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .banner-slides { display: flex; height: 100%; transition: transform 0.6s ease-in-out; }
+  .banner-slide {
+    flex: 0 0 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-color: #2a2a2a;
+  }
+
+  .text-overlay {
+    position: absolute;
+    top: 12%;
+    left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 2;
+    padding: 0 16px;
+  }
+  .text-box {
+    background: var(--color-overlay);
+    padding: 18px 28px;
+    border-radius: var(--radius-md);
+    text-align: center;
+    max-width: 520px;
+    pointer-events: auto;
+    backdrop-filter: blur(2px);
+  }
+  .text-box p {
+    color: var(--color-accent-soft);
+    font-size: clamp(18px, 3.4vw, 30px);
+    font-weight: 700;
+    margin: 4px 0;
+    line-height: 1.25;
+  }
+  .text-box p + p {
+    font-size: clamp(15px, 2.6vw, 22px);
+    color: #fff;
+  }
+
+  .banner-arrow,
+  .gallery-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.85);
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #333;
+    z-index: 10;
+    border: none;
+    transition: opacity var(--transition), background var(--transition), transform 0.15s;
+    opacity: 0;
+  }
+  .banner-slider:hover .banner-arrow,
+  .banner-slider:focus-within .banner-arrow,
+  .house-gallery:hover .gallery-arrow,
+  .house-gallery:focus-within .gallery-arrow { opacity: 1; }
+  .banner-arrow:hover, .gallery-arrow:hover { background: var(--color-accent-soft); }
+  .banner-arrow:active, .gallery-arrow:active { transform: translateY(-50%) scale(0.92); }
+  .banner-arrow.prev, .gallery-arrow.prev { left: 16px; }
+  .banner-arrow.next, .gallery-arrow.next { right: 16px; }
+
+  .banner-nav, .gallery-nav {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+    max-width: 90%;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+  }
+  .banner-dot, .gallery-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: background var(--transition), transform var(--transition);
+    border: none;
+    padding: 0;
+  }
+  .banner-dot.active, .gallery-dot.active { background: var(--color-accent-soft); transform: scale(1.25); }
+  .banner-dot:hover, .gallery-dot:hover { background: var(--color-accent-soft); }
+
+  /* === Мини-баннер === */
+  .mini-banner {
+    width: 100%;
+    min-height: clamp(120px, 28vh, 260px);
+    background: url("http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/akc01.jpg") center/cover no-repeat;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px 16px;
+  }
+  .banner-text { max-width: 900px; }
+  .promo-text {
+    font-size: clamp(22px, 5.5vw, 44px);
+    font-weight: 800;
+    color: var(--color-accent);
+    margin-bottom: 8px;
+    line-height: 1.15;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.45);
+  }
+  .main-text {
+    font-size: clamp(15px, 3.6vw, 28px);
+    color: #1a1a1a;
+    line-height: 1.25;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.6);
+  }
+
+  /* === Заголовки секций === */
+  .section-title {
+    text-align: center;
+    margin: 36px 0 24px;
+    font-size: clamp(22px, 4vw, 32px);
+    color: var(--color-accent);
+    font-weight: 700;
+  }
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 90px;
+    height: 4px;
+    background: linear-gradient(to right, #c9a581, var(--color-muted));
+    margin: 12px auto 0;
+    border-radius: 2px;
+  }
+
+  /* === Карточка дома === */
+  .house-container {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--color-card);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 40px;
+    transition: transform 0.35s, box-shadow 0.35s;
+    scroll-margin-top: calc(var(--header-h) + 16px);
+  }
+  .house-container:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .house-gallery {
+    flex: 1 1 480px;
+    min-width: 280px;
+    position: relative;
+    overflow: hidden;
+    min-height: 320px;
+    background: #1d1d1d;
+  }
+  .gallery-slides { display: flex; height: 100%; transition: transform 0.6s ease-in-out; }
+  .gallery-slide { flex: 0 0 100%; height: 100%; position: relative; }
+  .gallery-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #1d1d1d;
+  }
+  .gallery-slide video { width: 100%; height: 100%; object-fit: cover; background: #000; }
+
+  /* Горизонтальные фото — фон с блюром, картинка вписана внутрь */
+  .gallery-slide.horizontal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+  .gallery-slide.horizontal-container img {
+    width: auto;
+    max-width: 92%;
+    height: auto;
+    max-height: 92%;
+    object-fit: contain;
+    z-index: 2;
+    position: relative;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    background: transparent;
+  }
+  .gallery-slide.horizontal-container::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    filter: blur(15px) brightness(0.85);
+    z-index: 1;
+  }
+  .gallery-slide.horizontal-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.18);
+    z-index: 1;
+  }
+
+  /* Счётчик слайдов */
+  .gallery-counter {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+    pointer-events: none;
+    letter-spacing: 0.4px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* === Информация о доме === */
+  .house-info {
+    flex: 1 1 360px;
+    min-width: 280px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .house-name {
+    text-align: center;
+    font-size: clamp(20px, 3vw, 28px);
+    margin-bottom: 18px;
+    color: var(--color-accent);
+    font-weight: 700;
+    position: relative;
+  }
+  .house-name::after {
+    content: '';
+    display: block;
+    width: 60px; height: 3px;
+    background: #c9a581;
+    margin: 8px auto 0;
+    border-radius: 2px;
+  }
+  .pricing { margin-bottom: 18px; }
+  .price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+    font-size: 15px;
+  }
+  .price-item span:first-child { color: var(--color-text-soft); }
+  .price-value { font-weight: 700; color: var(--color-text); white-space: nowrap; }
+
+  .details { margin-bottom: 18px; display: grid; gap: 8px; }
+  .detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 15px;
+  }
+  .detail-icon {
+    color: #c9a581;
+    min-width: 22px;
+    text-align: center;
+    padding-top: 3px;
+  }
+
+  .booking-block { display: flex; flex-direction: column; gap: 10px; }
+  .rent-text {
+    display: block;
+    font-weight: 700;
+    font-size: 16px;
+    text-align: center;
+    color: var(--color-text);
+  }
+  .social-links { display: flex; justify-content: center; gap: 14px; }
+  .social-link {
+    display: flex; align-items: center; justify-content: center;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 22px;
+    text-decoration: none;
+    transition: transform var(--transition), box-shadow var(--transition);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .social-link:hover, .social-link:focus-visible { transform: scale(1.08) translateY(-2px); }
+  .social-link.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); }
+  .social-link.telegram { background: linear-gradient(135deg, #0088cc, #004d73); }
+  .social-link.max { background: linear-gradient(135deg, #8a2be2, #4b0082); }
+  .social-link.max img { width: 26px; height: 26px; display: block; border-radius: 6px; }
+  .phone-number {
+    text-align: center;
+    font-size: clamp(17px, 2.4vw, 20px);
+    color: var(--color-text);
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-block;
+    margin: 0 auto;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    transition: background var(--transition);
+  }
+  .phone-number:hover { background: rgba(187, 132, 15, 0.12); }
+
+  /* === Footer === */
+  .site-footer {
+    background: var(--color-muted);
+    color: var(--color-text);
+    padding: 40px 20px 24px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    margin-top: 24px;
+  }
+  .footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .footer-map {
+    flex: 1 1 320px;
+    min-width: 260px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+  .footer-map iframe { width: 100%; height: 300px; border: 0; display: block; }
+  .footer-info {
+    flex: 1 1 280px;
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .footer-info h3 {
+    margin-bottom: 16px;
+    color: var(--color-text);
+    position: relative;
+    display: inline-block;
+    font-size: clamp(18px, 2.6vw, 22px);
+  }
+  .footer-info h3::after {
+    content: '';
+    display: block;
+    width: 44px; height: 2px;
+    background: var(--color-accent-soft);
+    margin-top: 6px;
+  }
+  .footer-info p { margin-bottom: 8px; }
+  .footer-info a { text-decoration: none; }
+  .footer-info a:hover { color: var(--color-accent); }
+  .footer-social { display: flex; gap: 16px; margin-top: 14px; }
+  .footer-social a {
+    color: var(--color-text);
+    font-size: 24px;
+    text-decoration: none;
+    transition: color var(--transition), transform var(--transition);
+  }
+  .footer-social a:hover { color: var(--color-accent-soft); transform: translateY(-2px); }
+  .footer-bottom {
+    max-width: var(--maxw);
+    margin: 24px auto 0;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    text-align: center;
+    font-size: 13px;
+    color: var(--color-text-soft);
+  }
+
+  /* === Плавающие кнопки === */
+  .float-call,
+  .scroll-top {
+    position: fixed;
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 22px;
+    text-decoration: none;
+    z-index: 999;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    transition: transform var(--transition), opacity var(--transition);
+  }
+  .float-call {
+    right: 16px;
+    bottom: 84px;
+    background: linear-gradient(135deg, #25D366, #128C7E);
+  }
+  .scroll-top {
+    right: 16px;
+    bottom: 18px;
+    background: linear-gradient(135deg, #bb840f, #8a5e08);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .scroll-top.visible { opacity: 1; pointer-events: auto; }
+  .float-call:hover, .scroll-top:hover { transform: scale(1.08); }
+  @media (max-width: 768px) {
+    .float-call { display: flex; }
+    .scroll-top { display: flex; }
+  }
+
+  /* === Анимации появления === */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    will-change: opacity, transform;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* === Адаптив === */
+  @media (max-width: 768px) {
+    .banner-slider { height: clamp(260px, 50vh, 480px); }
+    .banner-arrow, .gallery-arrow {
+      opacity: 1;
+      width: 36px; height: 36px;
+      font-size: 15px;
+    }
+    .banner-arrow.prev, .gallery-arrow.prev { left: 8px; }
+    .banner-arrow.next, .gallery-arrow.next { right: 8px; }
+    .house-info { padding: 22px; }
+    .price-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+      font-size: 14px;
+    }
+    .price-item span { width: 100%; line-height: 1.4; }
+    .price-value { font-weight: 700; color: #1a1a1a; }
+    .gallery-slide.horizontal-container img { max-width: 95%; max-height: 95%; }
+    .gallery-slide.horizontal-container::before { filter: blur(10px) brightness(0.85); }
+    .gallery-counter { font-size: 11px; padding: 3px 8px; }
+  }
+
+  @media (max-width: 480px) {
+    .banner-slider { height: clamp(240px, 45vh, 380px); }
+    .text-box { padding: 12px 18px; }
+    .gallery-slide.horizontal-container img { max-width: 98%; max-height: 98%; }
+    .gallery-slide.horizontal-container::before { filter: blur(8px) brightness(0.85); }
+    .house-container { border-radius: var(--radius-md); margin-bottom: 28px; }
+    .house-info { padding: 18px; }
+  }
+
+  /* Видео контролы — скрыть mute (видео изначально muted) */
+  video::-webkit-media-controls-mute-button,
+  video::-webkit-media-controls-volume-slider { display: none !important; }
+</style>
+<main>
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="#main-content" class="brand" aria-label="Страна чудес — на главную">
+        <img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/logo.png" alt="" width="42" height="42" loading="eager" decoding="async" onerror="this.style.display='none'">
+        <span class="brand-name">Страна чудес</span>
+      </a>
+      <nav class="header-nav" aria-label="Дома">
+        <a href="#house1">Дом 1</a>
+        <a href="#house2">Дом 2</a>
+        <a href="#house3">Дом 3</a>
+        <a href="#house4">Дом 4</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <div class="header-contact">
+        <a href="tel:+73412473547" class="header-phone" aria-label="Позвонить">8 (341) 247-35-47</a>
+        <span class="header-address">Районная ул., 47А, Ижевск</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ГЛАВНЫЙ БАННЕР -->
+  <section class="banner-slider" id="main-banner" aria-roledescription="карусель" aria-label="Фото банного комплекса" tabindex="0">
+    <div class="banner-slides">
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/g-background01.jpg')" role="group" aria-label="Слайд 1"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/g-background02.jpg')" role="group" aria-label="Слайд 2"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-8_resized.jpg')" role="group" aria-label="Слайд 3"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/g-background04.jpg')" role="group" aria-label="Слайд 4"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/g-background06.jpg')" role="group" aria-label="Слайд 5"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-11_resized.jpg')" role="group" aria-label="Слайд 6"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/g-background05.jpg')" role="group" aria-label="Слайд 7"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/g-background07.jpg')" role="group" aria-label="Слайд 8"></div>
+      <div class="banner-slide" style="background-image:url('http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-18_resized.jpg')" role="group" aria-label="Слайд 9"></div>
+    </div>
+
+    <div class="text-overlay">
+      <div class="text-box">
+        <p>Отдохни с семьёй и друзьями</p>
+        <p>от 2 200 руб./час</p>
+      </div>
+    </div>
+
+    <button class="banner-arrow prev" type="button" aria-label="Предыдущий слайд"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+    <button class="banner-arrow next" type="button" aria-label="Следующий слайд"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+    <div class="banner-nav" role="tablist" aria-label="Навигация по баннеру"></div>
+  </section>
+
+  <!-- АКЦИЯ -->
+  <aside class="mini-banner" aria-label="Акция">
+    <div class="banner-text">
+      <div class="promo-text">Акция:</div>
+      <div class="main-text">5-й час в подарок за наличный расчёт</div>
+    </div>
+  </aside>
+
+  <div class="container">
+    <h2 class="section-title fade-up">Наши дома</h2>
+
+    <!-- ДОМ 1 -->
+    <article id="house1" class="house-container fade-up" aria-labelledby="house1-title">
+      <div class="house-gallery" aria-roledescription="галерея" aria-label="Фотографии Дома №1" tabindex="0">
+        <div class="gallery-slides">
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-9_resized.jpg" alt="Дом 1 — фото 1" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-4_resized.jpg" alt="Дом 1 — фото 2" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-43_resized.jpg" alt="Дом 1 — фото 3" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/photo_2025-10-31_14-30-25.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/photo_2025-10-31_14-30-25.jpg" alt="Дом 1 — фото 4" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-15_resized-2.jpg" alt="Дом 1 — фото 5" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-18_resized-1.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-18_resized-1.jpg" alt="Дом 1 — фото 6" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-29-2_resized.jpg" alt="Дом 1 — фото 7" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-34_resized.jpg" alt="Дом 1 — фото 8" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-36_resized.jpg" alt="Дом 1 — фото 9" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-49_resized.jpg" alt="Дом 1 — фото 10" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/первый-дом-59_resized.jpg" alt="Дом 1 — фото 11" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide">
+            <video controls preload="none" playsinline muted aria-label="Видео-обзор Дома №1">
+              <source src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/videohome1.mp4" type="video/mp4">
+              Ваш браузер не поддерживает видео.
+            </video>
+          </div>
+        </div>
+        <button class="gallery-arrow prev" type="button" aria-label="Предыдущее фото"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="gallery-arrow next" type="button" aria-label="Следующее фото"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        <div class="gallery-counter" aria-hidden="true">1 / 1</div>
+        <div class="gallery-nav" role="tablist" aria-label="Навигация по галерее"></div>
+      </div>
+
+      <div class="house-info">
+        <div>
+          <h3 id="house1-title" class="house-name">Дом №1</h3>
+          <div class="pricing">
+            <div class="price-item"><span>Понедельник — четверг</span><span class="price-value">3000 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">27 000 руб./сутки</span></div>
+            <div class="price-item"><span>Пятница — воскресенье и выходные</span><span class="price-value">3200 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">30 000 руб./сутки</span></div>
+          </div>
+          <div class="details">
+            <div class="detail-item"><i class="fas fa-users detail-icon" aria-hidden="true"></i><span>Вместимость: до 20 человек</span></div>
+            <div class="detail-item"><i class="fas fa-clock detail-icon" aria-hidden="true"></i><span>На сутки: заезд 14:00, выезд 12:00</span></div>
+            <div class="detail-item"><i class="fas fa-user-plus detail-icon" aria-hidden="true"></i><span>Свыше 20 чел. — 500 руб./чел.</span></div>
+          </div>
+        </div>
+        <div class="booking-block">
+          <span class="rent-text">Забронировать</span>
+          <div class="social-links">
+            <a href="https://wa.me/89512165303" class="social-link whatsapp" aria-label="Написать в WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://t.me/+79512165303" class="social-link telegram" aria-label="Написать в Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+            <a href="https://max.ru/u/f9LHodD0cOLtNHgYZvAaH5VN4HuAIal9MVPdt4ZdmO7aNkYG2t6CfK_eE08" class="social-link max" aria-label="Написать в Max"><img src="https://maxicons.ru/icons/png/Max_logo/Max_logo-1024x1024.png" alt="" width="26" height="26" loading="lazy" decoding="async"></a>
+          </div>
+          <a href="tel:+73412473547" class="phone-number">8 (341) 247-35-47</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ДОМ 2 -->
+    <article id="house2" class="house-container fade-up" aria-labelledby="house2-title">
+      <div class="house-gallery" aria-roledescription="галерея" aria-label="Фотографии Дома №2" tabindex="0">
+        <div class="gallery-slides">
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-6_resized.jpg" alt="Дом 2 — фото 1" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-27_resized.jpg" alt="Дом 2 — фото 2" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/photo_2025-10-30_18-51-39.jpg" alt="Дом 2 — фото 3" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-24_resized.jpg" alt="Дом 2 — фото 4" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-38_resized.jpg" alt="Дом 2 — фото 5" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-36_resized.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-36_resized.jpg" alt="Дом 2 — фото 6" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/dsc-2.png" alt="Дом 2 — фото 7" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-9_resized.jpg" alt="Дом 2 — фото 8" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/второй-дом-13_resized.jpg" alt="Дом 2 — фото 9" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide">
+            <video controls preload="none" playsinline muted aria-label="Видео-обзор Дома №2">
+              <source src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/videohome2.mp4" type="video/mp4">
+              Ваш браузер не поддерживает видео.
+            </video>
+          </div>
+        </div>
+        <button class="gallery-arrow prev" type="button" aria-label="Предыдущее фото"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="gallery-arrow next" type="button" aria-label="Следующее фото"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        <div class="gallery-counter" aria-hidden="true">1 / 1</div>
+        <div class="gallery-nav" role="tablist" aria-label="Навигация по галерее"></div>
+      </div>
+
+      <div class="house-info">
+        <div>
+          <h3 id="house2-title" class="house-name">Дом №2</h3>
+          <div class="pricing">
+            <div class="price-item"><span>Понедельник — четверг</span><span class="price-value">2800 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">25 000 руб./сутки</span></div>
+            <div class="price-item"><span>Пятница — воскресенье и выходные</span><span class="price-value">3000 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">27 000 руб./сутки</span></div>
+          </div>
+          <div class="details">
+            <div class="detail-item"><i class="fas fa-users detail-icon" aria-hidden="true"></i><span>Вместимость: до 15 человек</span></div>
+            <div class="detail-item"><i class="fas fa-clock detail-icon" aria-hidden="true"></i><span>На сутки: заезд 14:00, выезд 12:00</span></div>
+            <div class="detail-item"><i class="fas fa-user-plus detail-icon" aria-hidden="true"></i><span>Свыше 15 чел. — 500 руб./чел.</span></div>
+          </div>
+        </div>
+        <div class="booking-block">
+          <span class="rent-text">Забронировать</span>
+          <div class="social-links">
+            <a href="https://wa.me/89512165303" class="social-link whatsapp" aria-label="Написать в WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://t.me/+79512165303" class="social-link telegram" aria-label="Написать в Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+            <a href="https://max.ru/u/f9LHodD0cOLtNHgYZvAaH5VN4HuAIal9MVPdt4ZdmO7aNkYG2t6CfK_eE08" class="social-link max" aria-label="Написать в Max"><img src="https://maxicons.ru/icons/png/Max_logo/Max_logo-1024x1024.png" alt="" width="26" height="26" loading="lazy" decoding="async"></a>
+          </div>
+          <a href="tel:+73412473547" class="phone-number">8 (341) 247-35-47</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ДОМ 3 -->
+    <article id="house3" class="house-container fade-up" aria-labelledby="house3-title">
+      <div class="house-gallery" aria-roledescription="галерея" aria-label="Фотографии Дома №3" tabindex="0">
+        <div class="gallery-slides">
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7224-scaled.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7224-scaled.jpg" alt="Дом 3 — фото 1" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/dsc-4.png" alt="Дом 3 — фото 2" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/третий-дом-5_resized.jpg" alt="Дом 3 — фото 3" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/третий-дом-10_resized.jpg" alt="Дом 3 — фото 4" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/dsc-8.png" alt="Дом 3 — фото 5" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/третий-дом-18_resized.jpg" alt="Дом 3 — фото 6" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7239-1-scaled.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7239-1-scaled.jpg" alt="Дом 3 — фото 7" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide">
+            <video controls preload="none" playsinline muted aria-label="Видео-обзор Дома №3">
+              <source src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/videohome3.mp4" type="video/mp4">
+              Ваш браузер не поддерживает видео.
+            </video>
+          </div>
+        </div>
+        <button class="gallery-arrow prev" type="button" aria-label="Предыдущее фото"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="gallery-arrow next" type="button" aria-label="Следующее фото"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        <div class="gallery-counter" aria-hidden="true">1 / 1</div>
+        <div class="gallery-nav" role="tablist" aria-label="Навигация по галерее"></div>
+      </div>
+
+      <div class="house-info">
+        <div>
+          <h3 id="house3-title" class="house-name">Дом №3</h3>
+          <div class="pricing">
+            <div class="price-item"><span>Понедельник — четверг</span><span class="price-value">2200 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">13 000 руб./сутки</span></div>
+            <div class="price-item"><span>Пятница — воскресенье и выходные</span><span class="price-value">2400 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">15 000 руб./сутки</span></div>
+          </div>
+          <div class="details">
+            <div class="detail-item"><i class="fas fa-users detail-icon" aria-hidden="true"></i><span>Вместимость: до 6 человек</span></div>
+            <div class="detail-item"><i class="fas fa-clock detail-icon" aria-hidden="true"></i><span>На сутки: заезд 14:00, выезд 12:00</span></div>
+            <div class="detail-item"><i class="fas fa-user-plus detail-icon" aria-hidden="true"></i><span>Свыше 6 чел. — 500 руб./чел.</span></div>
+          </div>
+        </div>
+        <div class="booking-block">
+          <span class="rent-text">Забронировать</span>
+          <div class="social-links">
+            <a href="https://wa.me/89512165303" class="social-link whatsapp" aria-label="Написать в WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://t.me/+79512165303" class="social-link telegram" aria-label="Написать в Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+            <a href="https://max.ru/u/f9LHodD0cOLtNHgYZvAaH5VN4HuAIal9MVPdt4ZdmO7aNkYG2t6CfK_eE08" class="social-link max" aria-label="Написать в Max"><img src="https://maxicons.ru/icons/png/Max_logo/Max_logo-1024x1024.png" alt="" width="26" height="26" loading="lazy" decoding="async"></a>
+          </div>
+          <a href="tel:+73412473547" class="phone-number">8 (341) 247-35-47</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- ДОМ 4 -->
+    <article id="house4" class="house-container fade-up" aria-labelledby="house4-title">
+      <div class="house-gallery" aria-roledescription="галерея" aria-label="Фотографии Дома №4" tabindex="0">
+        <div class="gallery-slides">
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7386-scaled.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7386-scaled.jpg" alt="Дом 4 — фото 1" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7381.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7381.jpg" alt="Дом 4 — фото 2" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7384-scaled.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7384-scaled.jpg" alt="Дом 4 — фото 3" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/четвертый-дом-5_resized.jpg" alt="Дом 4 — фото 4" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/четвертый-дом-11_resized.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/четвертый-дом-11_resized.jpg" alt="Дом 4 — фото 5" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/четвертый-дом-15_resized.jpg" alt="Дом 4 — фото 6" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/четвертый-дом-16_resized.jpg" alt="Дом 4 — фото 7" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide horizontal-container" style="background-image:url('https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7236-scaled.jpg')">
+            <img src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/IMG_7236-scaled.jpg" alt="Дом 4 — фото 8" loading="lazy" decoding="async">
+          </div>
+          <div class="gallery-slide"><img src="http://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/четвертый-дом-30_resized.jpg" alt="Дом 4 — фото 9" loading="lazy" decoding="async"></div>
+          <div class="gallery-slide">
+            <video controls preload="none" playsinline muted aria-label="Видео-обзор Дома №4">
+              <source src="https://www.xn--80aabof0awwigeq5c.xn--p1ai/wp-content/uploads/videohome4.mp4" type="video/mp4">
+              Ваш браузер не поддерживает видео.
+            </video>
+          </div>
+        </div>
+        <button class="gallery-arrow prev" type="button" aria-label="Предыдущее фото"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+        <button class="gallery-arrow next" type="button" aria-label="Следующее фото"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        <div class="gallery-counter" aria-hidden="true">1 / 1</div>
+        <div class="gallery-nav" role="tablist" aria-label="Навигация по галерее"></div>
+      </div>
+
+      <div class="house-info">
+        <div>
+          <h3 id="house4-title" class="house-name">Дом №4</h3>
+          <div class="pricing">
+            <div class="price-item"><span>Понедельник — четверг</span><span class="price-value">2300 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">15 000 руб./сутки</span></div>
+            <div class="price-item"><span>Пятница — воскресенье и выходные</span><span class="price-value">2500 руб./час</span></div>
+            <div class="price-item"><span>Сутки</span><span class="price-value">17 000 руб./сутки</span></div>
+          </div>
+          <div class="details">
+            <div class="detail-item"><i class="fas fa-users detail-icon" aria-hidden="true"></i><span>Вместимость: до 12 человек</span></div>
+            <div class="detail-item"><i class="fas fa-clock detail-icon" aria-hidden="true"></i><span>На сутки: заезд 14:00, выезд 12:00</span></div>
+            <div class="detail-item"><i class="fas fa-user-plus detail-icon" aria-hidden="true"></i><span>Свыше 12 чел. — 500 руб./чел.</span></div>
+          </div>
+        </div>
+        <div class="booking-block">
+          <span class="rent-text">Забронировать</span>
+          <div class="social-links">
+            <a href="https://wa.me/89512165303" class="social-link whatsapp" aria-label="Написать в WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://t.me/+79512165303" class="social-link telegram" aria-label="Написать в Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+            <a href="https://max.ru/u/f9LHodD0cOLtNHgYZvAaH5VN4HuAIal9MVPdt4ZdmO7aNkYG2t6CfK_eE08" class="social-link max" aria-label="Написать в Max"><img src="https://maxicons.ru/icons/png/Max_logo/Max_logo-1024x1024.png" alt="" width="26" height="26" loading="lazy" decoding="async"></a>
+          </div>
+          <a href="tel:+73412473547" class="phone-number">8 (341) 247-35-47</a>
+        </div>
+      </div>
+    </article>
+
+    <footer id="contacts" class="site-footer fade-up">
+      <div class="footer-container">
+        <div class="footer-map">
+          <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3Aabcdfbe1c9124b2777b02b9cc0eceed65599a264b346b4803d3938787f2b8e78&source=constructorLink" loading="lazy" title="Карта проезда"></iframe>
+        </div>
+        <div class="footer-info">
+          <h3>Контакты</h3>
+          <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i>&nbsp; Районная ул., 47А, Ижевск</p>
+          <p><a href="tel:+73412473547"><i class="fas fa-phone" aria-hidden="true"></i>&nbsp; 8 (341) 247-35-47</a></p>
+          <p><i class="far fa-clock" aria-hidden="true"></i>&nbsp; Заезд 14:00, выезд 12:00</p>
+          <div class="footer-social">
+            <a href="https://wa.me/89512165303" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+            <a href="https://t.me/+79512165303" aria-label="Telegram"><i class="fab fa-telegram" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © <span id="footer-year"></span> Страна чудес. Все права защищены.
+      </div>
+    </footer>
+  </div>
+
+  <a href="https://wa.me/89512165303" class="float-call" aria-label="Связаться в WhatsApp">
+    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+  </a>
+  <button type="button" class="scroll-top" aria-label="Наверх">
+    <i class="fas fa-arrow-up" aria-hidden="true"></i>
+  </button>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initBanner();
+    initHouseGalleries();
+    initVideoControls();
+    initFadeUp();
+    initScrollTop();
+    initFooterYear();
+  });
+
+  // === Главный баннер ===
+  function initBanner() {
+    const banner = document.getElementById('main-banner');
+    if (!banner) return;
+
+    const slidesEl = banner.querySelector('.banner-slides');
+    const slides = banner.querySelectorAll('.banner-slide');
+    const navEl = banner.querySelector('.banner-nav');
+    const prev = banner.querySelector('.banner-arrow.prev');
+    const next = banner.querySelector('.banner-arrow.next');
+    const total = slides.length;
+    if (total === 0) return;
+
+    // Динамическая генерация точек
+    const dots = buildDots(navEl, total, 'banner-dot');
+
+    let index = 0;
+    let timer = null;
+    const interval = 7000;
+
+    const update = () => {
+      slidesEl.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === index);
+        d.setAttribute('aria-selected', i === index ? 'true' : 'false');
+      });
+    };
+    const go = (i) => { index = (i + total) % total; update(); };
+    const nextSlide = () => go(index + 1);
+    const prevSlide = () => go(index - 1);
+
+    const start = () => {
+      stop();
+      if (document.hidden) return;
+      timer = setInterval(nextSlide, interval);
+    };
+    const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+    const reset = () => { stop(); start(); };
+
+    next.addEventListener('click', () => { nextSlide(); reset(); });
+    prev.addEventListener('click', () => { prevSlide(); reset(); });
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => { go(i); reset(); });
+    });
+
+    // Пауза при наведении и потере фокуса вкладки
+    banner.addEventListener('mouseenter', stop);
+    banner.addEventListener('mouseleave', start);
+    banner.addEventListener('focusin', stop);
+    banner.addEventListener('focusout', start);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop(); else start();
+    });
+
+    // Свайпы
+    attachSwipe(banner, nextSlide, prevSlide, reset);
+
+    // Клавиатура
+    banner.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') { nextSlide(); reset(); }
+      else if (e.key === 'ArrowLeft') { prevSlide(); reset(); }
+    });
+
+    update();
+    start();
+  }
+
+  // === Галереи домов ===
+  function initHouseGalleries() {
+    const galleries = document.querySelectorAll('.house-gallery');
+    galleries.forEach((gallery) => {
+      const slidesEl = gallery.querySelector('.gallery-slides');
+      const slides = gallery.querySelectorAll('.gallery-slide');
+      const navEl = gallery.querySelector('.gallery-nav');
+      const counter = gallery.querySelector('.gallery-counter');
+      const prev = gallery.querySelector('.gallery-arrow.prev');
+      const next = gallery.querySelector('.gallery-arrow.next');
+      const videos = gallery.querySelectorAll('video');
+      const total = slides.length;
+      if (total === 0) return;
+
+      const dots = buildDots(navEl, total, 'gallery-dot');
+      let index = 0;
+
+      const update = () => {
+        slidesEl.style.transform = `translateX(-${index * 100}%)`;
+        dots.forEach((d, i) => {
+          d.classList.toggle('active', i === index);
+          d.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        });
+        if (counter) counter.textContent = `${index + 1} / ${total}`;
+        videos.forEach((v) => {
+          if (!v.paused) { v.pause(); v.currentTime = 0; }
+        });
+      };
+      const go = (i) => { index = (i + total) % total; update(); };
+      const nextSlide = () => go(index + 1);
+      const prevSlide = () => go(index - 1);
+
+      next.addEventListener('click', nextSlide);
+      prev.addEventListener('click', prevSlide);
+      dots.forEach((dot, i) => dot.addEventListener('click', () => go(i)));
+
+      attachSwipe(gallery, nextSlide, prevSlide);
+
+      gallery.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        else if (e.key === 'ArrowLeft') prevSlide();
+      });
+
+      update();
+    });
+  }
+
+  // === Утилиты ===
+  function buildDots(container, count, cls) {
+    if (!container) return [];
+    container.innerHTML = '';
+    const dots = [];
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = cls;
+      dot.setAttribute('role', 'tab');
+      dot.setAttribute('aria-label', `Слайд ${i + 1}`);
+      container.appendChild(dot);
+      dots.push(dot);
+    }
+    return dots;
+  }
+
+  function attachSwipe(el, onNext, onPrev, onAfter) {
+    let startX = 0;
+    let startY = 0;
+    let tracking = false;
+    const threshold = 50;
+
+    el.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      tracking = true;
+    }, { passive: true });
+
+    el.addEventListener('touchend', (e) => {
+      if (!tracking) return;
+      tracking = false;
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const dx = startX - endX;
+      const dy = startY - endY;
+      if (Math.abs(dx) > threshold && Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 0) onNext(); else onPrev();
+        if (onAfter) onAfter();
+      }
+    }, { passive: true });
+  }
+
+  // === Видео: при старте одного — паузим остальные ===
+  function initVideoControls() {
+    const videos = document.querySelectorAll('video');
+    videos.forEach((video) => {
+      video.addEventListener('play', () => {
+        videos.forEach((other) => {
+          if (other !== video && !other.paused) other.pause();
+        });
+      });
+    });
+  }
+
+  // === Анимация появления при скролле ===
+  function initFadeUp() {
+    const items = document.querySelectorAll('.fade-up');
+    if (!('IntersectionObserver' in window) || items.length === 0) {
+      items.forEach((el) => el.classList.add('visible'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    items.forEach((el) => io.observe(el));
+  }
+
+  // === Кнопка «Наверх» ===
+  function initScrollTop() {
+    const btn = document.querySelector('.scroll-top');
+    if (!btn) return;
+    const toggle = () => btn.classList.toggle('visible', window.scrollY > 400);
+    toggle();
+    window.addEventListener('scroll', toggle, { passive: true });
+    btn.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  function initFooterYear() {
+    const el = document.getElementById('footer-year');
+    if (el) el.textContent = new Date().getFullYear();
+  }
+})();
+</script>
